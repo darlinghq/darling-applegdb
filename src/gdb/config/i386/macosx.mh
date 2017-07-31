@@ -55,7 +55,7 @@ CFM_LIBS =
 
 MH_CFLAGS += -DUSE_PTHREADS=1 -Wall -Wimplicit -D_DARWIN_UNLIMITED_STREAMS -mmacosx-version-min=10.7
 
-XM_CLIBS = -framework Security
+#XM_CLIBS = -framework Security
 
 _all: all
 

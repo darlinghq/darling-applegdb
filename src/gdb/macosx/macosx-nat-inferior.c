@@ -50,7 +50,7 @@
 
 #include <sys/ptrace.h>
 #include <sys/signal.h>
-#include <machine/setjmp.h>
+//#include <machine/setjmp.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
@@ -2531,11 +2531,12 @@ macosx_child_create_inferior (char *exec_file, char *allargs, char **env,
 }
 #else /* #if defined (TARGET_ARM)  */
 
-#include <Security/Security.h>
+//#include <Security/Security.h>
 
 int
 macosx_get_task_for_pid_rights (void)
 {
+#if 0
   OSStatus stat;
   AuthorizationItem taskport_item[] = {{"system.privilege.taskport.debug"}};
   AuthorizationRights rights = {1, taskport_item}, *out_rights = NULL;
@@ -2640,6 +2641,8 @@ macosx_get_task_for_pid_rights (void)
   AuthorizationFree (author, kAuthorizationFlagDefaults);
 
   return retval;
+#endif
+  return 1;
 }
 
 
