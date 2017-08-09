@@ -2536,6 +2536,7 @@ macosx_child_create_inferior (char *exec_file, char *allargs, char **env,
 int
 macosx_get_task_for_pid_rights (void)
 {
+#ifndef NO_SECURITY_YET
   OSStatus stat;
   AuthorizationItem taskport_item[] = {{"system.privilege.taskport.debug"}};
   AuthorizationRights rights = {1, taskport_item}, *out_rights = NULL;
@@ -2640,6 +2641,9 @@ macosx_get_task_for_pid_rights (void)
   AuthorizationFree (author, kAuthorizationFlagDefaults);
 
   return retval;
+#else
+  return 1;
+#endif
 }
 
 
