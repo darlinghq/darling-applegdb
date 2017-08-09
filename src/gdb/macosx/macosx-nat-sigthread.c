@@ -99,7 +99,9 @@ macosx_signal_thread_create (macosx_signal_thread_status *s, int pid)
       throw_exception (e);
     }
 
+  //puts("Waiting on signal thread");
   pthread_cond_wait (&sigthread_cond, &sigthread_mutex);
+  puts("Waiting on signal thread done");
   pthread_mutex_unlock (&sigthread_mutex);
 
 }
@@ -176,10 +178,13 @@ macosx_signal_thread (void *arg)
         ("macosx_signal_thread: waiting for events for pid %d\n",
          s->inferior_pid);
 
+      printf("signal thread, first time %d\n", first_time);
       if (first_time)
         {
           first_time = 0;
+          puts("waiting for sigthread mutex");
           pthread_mutex_lock (&sigthread_mutex);
+          puts("broadcasting signal thread cond");
           pthread_cond_broadcast (&sigthread_cond);
           pthread_mutex_unlock (&sigthread_mutex);
         }

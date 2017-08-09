@@ -954,6 +954,7 @@ create_dsym_uuids_for_path (char *dsym_bundle_path)
 						  kCFStringEncodingUTF8);
 	  path_url = CFURLCreateWithFileSystemPath (NULL, path_cfstr,
                                                     kCFURLPOSIXPathStyle, 0);
+	  printf("CFUrlCreateWithFileSystemPath -> %p\n", path_url);
 	  
 	  CFRelease (path_cfstr), path_cfstr = NULL;
 	  if (path_url == NULL)

@@ -39,7 +39,7 @@ bison_target(GdbParser8 p-exp.y ${CMAKE_CURRENT_BINARY_DIR}/p-exp.c)
 
 flex_target(GdbScanner1 ada-lex.l ${CMAKE_CURRENT_BINARY_DIR}/ada-lex.c)
 
-ADD_FLEX_BISON_DEPENDENCY(GdbScanner1 GdbParser1)
+set_source_files_properties(${BISON_GdbParser1_OUTPUTS} PROPERTIES OBJECT_DEPENDS ${FLEX_GdbScanner1_OUTPUTS})
 
 set(libgdb_srcs
 	${CMAKE_CURRENT_BINARY_DIR}/macosx/macosxServer.c
@@ -52,7 +52,6 @@ set(libgdb_srcs
 	${BISON_GdbParser6_OUTPUTS}
 	${BISON_GdbParser7_OUTPUTS}
 	${BISON_GdbParser8_OUTPUTS}
-	# ${FLEX_GdbScanner1_OUTPUTS}
 
 	version.c
 	annotate.c

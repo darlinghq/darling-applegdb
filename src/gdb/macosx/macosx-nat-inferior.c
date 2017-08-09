@@ -2198,7 +2198,8 @@ macosx_ptrace_me ()
   /* This is the child side of the semaphore that I use to make sure
      the exception thread has started up before I exec.  The child
      side gets to create it, and also destroys it.  */
-  
+
+  puts("child #1");  
   snprintf (sem_name, 63, "gdb-%d", getpid());
   sem = sem_open (sem_name, O_CREAT | O_EXCL, 0644, 0);
   if (sem == (sem_t *) SEM_FAILED)
@@ -2212,6 +2213,7 @@ macosx_ptrace_me ()
       errno = 0;
       
     try_again:
+      puts("child #2");  
       retval = sem_wait (sem);
       if (retval == -1)
 	{
@@ -2232,8 +2234,9 @@ macosx_ptrace_me ()
       sem_close (sem);
       sem_unlink (sem_name);
     }
-
+  puts("child #3");  
   call_ptrace (PTRACE_TRACEME, 0, 0, 0);
+    puts("child #4");  
   call_ptrace (PTRACE_SIGEXC, 0, 0, 0);
 }
 
@@ -2244,6 +2247,7 @@ post_to_semaphore (void *input)
   sem_t *sem;
   char sem_name[64];
   
+  printf("post_to_semaphore\n");
   snprintf (sem_name, 63, "gdb-%d", pid);
   while (1)
     {
@@ -2283,8 +2287,10 @@ macosx_ptrace_him (int pid)
      semaphore.  I do it in a cleanup so I won't leave the fork
      side hanging if I run into an error here.  */
 
+  puts("ptrace_him #1");
   sem_cleanup = make_cleanup (post_to_semaphore, (void *) pid);
 
+  puts("ptrace_him #2");
   kret = task_for_pid (mach_task_self (), pid, &itask);
   if (kret != KERN_SUCCESS)
     {
@@ -2303,13 +2309,17 @@ macosx_ptrace_him (int pid)
              pid, MACH_ERROR_STRING (kret), (unsigned long) kret);
     }
 
+  puts("ptrace_him #3");
   inferior_debug (2, "inferior task: 0x%08x, pid: %d\n", itask, pid);
 
   push_target (&macosx_child_ops);
+    puts("ptrace_him #4");
   macosx_create_inferior_for_task (macosx_status, itask, pid);
 
+  puts("ptrace_him #5");
   macosx_signal_thread_create (&macosx_status->signal_status,
                                macosx_status->pid);
+  puts("ptrace_him #6");                               
   macosx_exception_thread_create (&macosx_status->exception_status,
                                   macosx_status->task);
 
@@ -2331,10 +2341,12 @@ macosx_ptrace_him (int pid)
   traps_expected = (start_with_shell_flag ? 2 : 1);
 #endif
 
+  puts("ptrace_him #7");
   /* Okay, the exception & signal listeners are set up,
      now signal the child side that it can proceed.  */
   do_cleanups (sem_cleanup);
 
+  puts("ptrace_him #8");
   startup_inferior (traps_expected);
 
   if (ptid_equal (inferior_ptid, null_ptid))
