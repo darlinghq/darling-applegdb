@@ -11,3 +11,5 @@ add_subdirectory(src/intl)
 add_subdirectory(src/readline)
 add_subdirectory(src/gdb)
 
+install(FILES gdb.conf DESTINATION libexec/darling/private/etc)
+
