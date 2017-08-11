@@ -190,7 +190,7 @@ set(gdb_srcs
 )
 
 add_darling_executable(gdb ${gdb_srcs})
-target_link_libraries(gdb iconv sqlite3 ncurses DebugSymbols CoreFoundation)
+target_link_libraries(gdb iconv sqlite3 ncurses DebugSymbols ${CoreFoundation})
 
 install(TARGETS gdb DESTINATION libexec/darling/usr/bin)
 
