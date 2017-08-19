@@ -52,7 +52,7 @@
 /* #undef HAVE_32_BIT_STACK_LOGGING */
 
 /* Define to 1 if you have 64 bit mach exceptions. */
-/* #undef HAVE_64_BIT_MACH_EXCEPTIONS */
+#define HAVE_64_BIT_MACH_EXCEPTIONS 1
 
 /* Define to 1 to use 64 bit stack logging functions. */
 #define HAVE_64_BIT_STACK_LOGGING 1
